@@ -1,0 +1,15 @@
+# Ambiente Virtual
+.venv/
+venv/
+
+# Arquivos de Cache do Python
+__pycache__/
+*.pyc
+
+# Arquivos do Streamlit
+.streamlit/
+streamlit-20240729T103155Z-001
+
+# Gabaritos
+gabarito_aula1.py
+gabarito_aula2.py
