@@ -7,7 +7,6 @@ env/
 # Arquivos de Cache do Python
 __pycache__/
 *.pyc
-<<<<<<< HEAD
 *.pyo
 *.pyd
 
@@ -23,13 +22,7 @@ Thumbs.db
 *.egg-info/
 build/
 dist/
-=======
 
-# Arquivos do Streamlit
-.streamlit/
-streamlit-20240729T103155Z-001
-
-# Gabaritos
-gabarito_aula1.py
-gabarito_aula2.py
->>>>>>> 15f1193976eab83faccaa3a0c0af4f6f145f944e
+# Arquivos diversos
+*.csv
+IBOV (1).csv:Zone.Identifier
