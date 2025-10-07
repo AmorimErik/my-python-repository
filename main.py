@@ -1,14 +1,15 @@
 import streamlit as st
 import pandas as pd
 import streamlit_authenticator as stauth
+from models import session, Usuario
 from sair import sair
 
-senhas_criptografadas = stauth.Hasher(["******", "********", "*******"]).generate()
+lista_usuarios = session.query(Usuario).all()
+
 credenciais = {
     "usernames": {
-        "email1@email.com": {"name": "jose", "password": senhas_criptografadas[0]},
-        "email2@email.com": {"name": "joao", "password": senhas_criptografadas[1]},
-        "email3@email.com": {"name": "mateus", "password": senhas_criptografadas[2]},
+        usuario.email: {"name": usuario.nome, "password": usuario.senha}
+        for usuario in lista_usuarios
     }
 }
 
@@ -27,11 +28,14 @@ def autenticar_usuario(authenticator):
         st.error("Preencha o formulário para fazer login.")
 
 
+def logout():
+    authenticator.logout()
+
+
 # Autenticar Usuário
 dados_usuario = autenticar_usuario(authenticator)
 
 if dados_usuario:
-
     @st.cache_data
     def carregar_dados():
         tabela = pd.read_excel("Base.xlsx")
@@ -39,18 +43,37 @@ if dados_usuario:
 
     base = carregar_dados()
 
-    pg = st.navigation(
-        {
-            "Home": [st.Page("homepage.py", title="Hash&Co")],
-            "Dashboards": [
-                st.Page("dashboard.py", title="Dashboard"),
-                st.Page("indicadores.py", title="Indicadores"),
-            ],
-            "Conta": [
-                st.Page("criar_conta.py", title="Criar conta"),
-                st.Page(lambda: sair(authenticator), title="Sair"),
-            ],
-        }
-    )
+    email_usuario = dados_usuario["username"]
+    usuario = session.query(Usuario).filter_by(email=email_usuario).first()
+
+    eh_admin = usuario.admin
+
+    if eh_admin:
+        pg = st.navigation(
+            {
+                "Home": [st.Page("homepage.py", title="Hash&Co")],
+                "Dashboards": [
+                    st.Page("dashboard.py", title="Dashboard"),
+                    st.Page("indicadores.py", title="Indicadores"),
+                ],
+                "Conta": [
+                    st.Page(logout, title="Sair"),
+                    st.Page("criar_conta.py", title="Criar Conta"),
+                ],
+            }
+        )
+    else:
+        pg = st.navigation(
+            {
+                "Home": [st.Page("homepage.py", title="Hash&Co")],
+                "Dashboards": [
+                    st.Page("dashboard.py", title="Dashboard"),
+                    st.Page("indicadores.py", title="Indicadores"),
+                ],
+                "Conta": [
+                    st.Page(logout, title="Sair"),
+                ],
+            }
+        )
 
     pg.run()
