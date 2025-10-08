@@ -4,3 +4,4 @@ venv
 *.xlsx
 database
 criar_admin.py
+images
