@@ -1,7 +1,10 @@
 __pycache__
+main.cpython-312.pyc
+sair.cpython-312.pyc
 .streamlit
 venv
 *.xlsx
 database
 criar_admin.py
 images
+__pycache__/sair.cpython-312.pyc
